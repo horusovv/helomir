@@ -1,0 +1,36 @@
+local WHITELIST = {
+    ["DiZyyyyyNvrLose"] = {"forever", os.time()},
+    ["Tyler_33345610"] = {"forever", os.time()},
+    ["XXthemanboy42XX"] = {"forever", os.time()},
+    ["Steelnozzle7718"] = {"forever", os.time()}
+    ["Flextwinge2742"] = {"30days", os.time()-15*86400}, 
+    ["Thisk1394"] = {"30days", os.time()-15*86400}, 
+    ["Crazyg5301"] = {"30days", os.time()-15*86400},
+    ["Playee7"] = {"7", os.time()}
+}
+
+local function CheckLicense(playerName)
+    local license = WHITELIST[playerName]
+    if not license then return false, "Нет лицензии" end
+    
+    local licenseType, activateDate = license[1], license[2]
+    local daysPassed = (os.time() - activateDate) / 86400
+    
+    if licenseType == "forever" then return true, "Forever" end
+    if licenseType == "30days" and daysPassed <= 30 then return true, "30 дней" end
+    if licenseType == "7days" and daysPassed <= 7 then return true, "7 дней" end
+    
+    return false, "Лицензия истекла"
+end
+
+local playerName = game.Players.LocalPlayer.Name
+local hasAccess, licenseInfo = CheckLicense(playerName)
+
+if hasAccess then
+    print("✅ Доступ разрешен: " .. licenseInfo)
+    
+    loadstring(game:HttpGet("https://vss.pandadevelopment.net/virtual/file/cbaae92336a54eb9"))()
+else
+    print("❌ Доступ запрещен: " .. licenseInfo)
+    game.Players.LocalPlayer:Kick("SWILL Whitelist: " .. licenseInfo)
+end
